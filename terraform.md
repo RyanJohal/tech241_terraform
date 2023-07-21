@@ -1,5 +1,5 @@
 # Terraform
-## WHat is it?
+## What is it?
 Terraform is an open-source infrastructure as code (IaC) tool developed by HashiCorp. It is used to automate the provisioning and management of cloud infrastructure and services. By defining infrastructure as code, Terraform allows users to create, modify, and delete resources in a consistent and reproducible manner.
 ## Why is it used?
 Terraform is used to simplify and accelerate the process of setting up and managing complex cloud environments. It provides a declarative syntax for describing the desired state of the infrastructure, allowing users to version-control and collaborate on infrastructure changes efficiently.
@@ -18,6 +18,13 @@ Scalability: Terraform allows users to scale infrastructure easily as demands gr
 ## Who is using it
 Companies and organizations of all sizes use Terraform for infrastructure management. Some well-known users include Airbnb, GitHub, HashiCorp, and many others across various industries.
 
+## The architecture
+![Alt text](images/tf.png)
+- Leverage Terraform configuration files to define and deploy essential infrastructure resources within your preferred cloud provider, such as AWS, Azure, or GCP.
+- Terraform guarantees the precise creation and configuration of infrastructure in accordance with the specified requirements.
+- After Terraform provisions the infrastructure, seamlessly employ Ansible playbooks to manage and customize software and settings on the newly deployed resources.
+- Ansible establishes connections to servers and executes playbook tasks, ensuring the desired configurations are effectively applied.
+
 # How to download terraform
 1. #### Download terraform:
    - Go to official Terraform website
@@ -32,3 +39,4 @@ Companies and organizations of all sizes use Terraform for infrastructure manage
 9. Click ok to exit
 10. Log into git bash of windows cli and use command ```terraform --version``` to test whether it has downloaded
 11. Outcome should look like this: ![Alt text](<images/Screenshot 2023-07-21 113204.png>)
+
