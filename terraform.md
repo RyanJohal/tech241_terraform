@@ -41,7 +41,26 @@ Companies and organizations of all sizes use Terraform for infrastructure manage
 11. Outcome should look like this: ![Alt text](<images/Screenshot 2023-07-21 113204.png>)
 
 # How to launch an instance through terraform
-![Alt text](images/image.png)
+![Alt text](<images/image (1).png>)
+#### VPC with terraform
+1. create vpc with cidr block 10.0.0.0/16
+2. create internet gateway
+3. attach to vpc
+4. create subnets
+5. set up public route tables
+6. add routes
+7. add vms
+```
+resource "aws_vpc" "tech241-ryan-vpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "tech241-ryan-vpc"
+  }
+}
+```
+
 1. Create env variable on local host, one for your access key and one for secret
 2. ```nano main.tf```
 3.  Paste script:
