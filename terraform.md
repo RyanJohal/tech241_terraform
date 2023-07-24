@@ -51,6 +51,143 @@ Companies and organizations of all sizes use Terraform for infrastructure manage
 6. add routes
 7. add vms
 ```
+# launch an ec2
+# which cloud - aws
+# terraform downloads required dependencies
+# terraform init
+
+# provider name
+provider "aws"{
+       # which part of this AWS
+       region = "eu-west-1"
+
+}
+# Create vpc
+resource "aws_vpc" "tech241-ryan-vpc" {
+  # which cidr block
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "tech241-ryan-vpc"
+  }
+}
+
+# Internet gateway
+resource "aws_internet_gateway" "tech241-ryan-igw" {
+  vpc_id = aws_vpc.tech241-ryan-vpc.id
+
+  tags = {
+    Name = "tech241-ryan-igw"
+  }
+}
+
+# Create a subnet within the VPC
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.tech241-ryan-vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "eu-west-1a"
+  tags = {
+    Name = "public"
+  }
+}
+
+resource "aws_subnet" "private" {
+  vpc_id                  = aws_vpc.tech241-ryan-vpc.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = "eu-west-1b"
+  tags = {
+    Name = "private"
+  }
+}
+
+# Create route table
+resource "aws_route_table" "tech241-ryan-public-rt" {
+  vpc_id = aws_vpc.tech241-ryan-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.tech241-ryan-igw.id
+  }
+
+  tags = {
+    Name = "tech241-ryan-public-rt"  }
+}
+
+resource "aws_route_table_association" "my_route_table_association" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.tech241-ryan-public-rt.id
+}
+
+# Create a security group with SSH access (modify rules as needed)
+resource "aws_security_group" "tech241-ryan-tf-http-ssh-3000" {
+  name_prefix = "tech241-ryan-tf-http-ssh-3000"
+  vpc_id      = aws_vpc.tech241-ryan-vpc.id
+
+  # Ingress rule to allow SSH access
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+    ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+    ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "tech241-ryan-tf-http-ssh-3000"
+  }
+}
+
+# Launch an ec2 in Ireland
+resource "aws_instance" "app_instance"{
+
+# Reference the existing SSH key pair using its name
+  key_name = "tech241"
+
+# Create a security group with SSH access (modify rules as needed)
+vpc_security_group_ids = [aws_security_group.tech241-ryan-tf-http-ssh-3000.id]
+  subnet_id     = aws_subnet.public.id
+
+# which machine/OS version etc. AMI-id
+  ami = "ami-06485fa6c320b0b1f"
+
+# what type of instance
+  instance_type = "t2.micro"
+
+# is the public IP required
+  associate_public_ip_address = true
+
+# what would you like to name it
+  tags = {
+       Name = "tech241-ryan-terraform-app"
+  }
+
+}
+
+```
+
+
+```
 resource "aws_vpc" "tech241-ryan-vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
