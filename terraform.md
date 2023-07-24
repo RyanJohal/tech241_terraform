@@ -40,3 +40,45 @@ Companies and organizations of all sizes use Terraform for infrastructure manage
 10. Log into git bash of windows cli and use command ```terraform --version``` to test whether it has downloaded
 11. Outcome should look like this: ![Alt text](<images/Screenshot 2023-07-21 113204.png>)
 
+# How to launch an instance through terraform
+![Alt text](images/image.png)
+1. Create env variable on local host, one for your access key and one for secret
+2. ```nano main.tf```
+3.  Paste script:
+```
+# launch an ec2
+# which cloud - aws
+# terraform downloads required dependencies
+# terraform init
+
+# provider name
+provider "aws"{
+       # which part of this AWS
+       region = "eu-west-1"
+
+}
+# Launch an ec2 in Ireland
+resource "aws_instance" "app_instance"{
+
+# which machine/OS version etc. AMI-id
+  ami = "ami-0943382e114f188e8"
+
+# what type of instance
+  instance_type = "t2.micro"
+
+# is the public IP required
+  associate_public_ip_address = true
+
+# what would you like to name it shahrukh-tech241-terraform-app
+  tags = {
+       Name = "tech241-ryan-terraform-app"
+  }
+
+
+}
+
+```
+4. ```terraform init```
+5. Check script works ```terraform plan```
+6. Run script ```terraform apply```
+7. Delete vm and all resources created with it ```terraform destroy```
