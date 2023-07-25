@@ -169,7 +169,7 @@ vpc_security_group_ids = [aws_security_group.tech241-ryan-tf-http-ssh-3000.id]
   subnet_id     = aws_subnet.public.id
 
 # which machine/OS version etc. AMI-id
-  ami = "ami-06485fa6c320b0b1f"
+  ami = var.webapp_ami_id
 
 # what type of instance
   instance_type = "t2.micro"
@@ -217,7 +217,7 @@ provider "aws"{
 resource "aws_instance" "app_instance"{
 
 # which machine/OS version etc. AMI-id
-  ami = "ami-0943382e114f188e8"
+  ami = var.webapp_ami_id
 
 # what type of instance
   instance_type = "t2.micro"
