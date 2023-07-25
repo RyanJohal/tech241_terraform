@@ -42,6 +42,59 @@ Companies and organizations of all sizes use Terraform for infrastructure manage
 
 # How to launch an instance through terraform
 ![Alt text](<images/image (1).png>)
+## Launch ec2 instance
+```
+resource "aws_vpc" "tech241-ryan-vpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "tech241-ryan-vpc"
+  }
+}
+```
+
+1. Create env variable on local host, one for your access key and one for secret
+2. ```nano main.tf```
+3.  Paste script:
+```
+# launch an ec2
+# which cloud - aws
+# terraform downloads required dependencies
+# terraform init
+
+# provider name
+provider "aws"{
+       # which part of this AWS
+       region = "eu-west-1"
+
+}
+# Launch an ec2 in Ireland
+resource "aws_instance" "app_instance"{
+
+# which machine/OS version etc. AMI-id
+  ami = var.webapp_ami_id
+
+# what type of instance
+  instance_type = "t2.micro"
+
+# is the public IP required
+  associate_public_ip_address = true
+
+# what would you like to name it shahrukh-tech241-terraform-app
+  tags = {
+       Name = "tech241-ryan-terraform-app"
+  }
+
+
+}
+
+```
+4. ```terraform init```
+5. Check script works ```terraform plan```
+6. Run script ```terraform apply```
+7. Delete vm and all resources created with it ```terraform destroy```
+
 #### VPC with terraform
 1. create vpc with cidr block 10.0.0.0/16
 2. create internet gateway
@@ -187,54 +240,17 @@ vpc_security_group_ids = [aws_security_group.tech241-ryan-tf-http-ssh-3000.id]
 ```
 
 
-```
-resource "aws_vpc" "tech241-ryan-vpc" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
+# All services
+Plan:
+1. Create launch template
+2. Create asg
+   - Select launch template
+   - Select az
+   - Attach new load balancer
+   - Select routing
+   - Turn on health checks
+   - Select group size and scaling policies
+   - add tags for new instances
+3. Create an alarm in cloud watch
+4. Set up sns alert
 
-  tags = {
-    Name = "tech241-ryan-vpc"
-  }
-}
-```
-
-1. Create env variable on local host, one for your access key and one for secret
-2. ```nano main.tf```
-3.  Paste script:
-```
-# launch an ec2
-# which cloud - aws
-# terraform downloads required dependencies
-# terraform init
-
-# provider name
-provider "aws"{
-       # which part of this AWS
-       region = "eu-west-1"
-
-}
-# Launch an ec2 in Ireland
-resource "aws_instance" "app_instance"{
-
-# which machine/OS version etc. AMI-id
-  ami = var.webapp_ami_id
-
-# what type of instance
-  instance_type = "t2.micro"
-
-# is the public IP required
-  associate_public_ip_address = true
-
-# what would you like to name it shahrukh-tech241-terraform-app
-  tags = {
-       Name = "tech241-ryan-terraform-app"
-  }
-
-
-}
-
-```
-4. ```terraform init```
-5. Check script works ```terraform plan```
-6. Run script ```terraform apply```
-7. Delete vm and all resources created with it ```terraform destroy```
